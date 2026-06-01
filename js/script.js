@@ -54,10 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 numeroActual = numero;
 
-                numeroSeleccionado.textContent = numero;
+document.getElementById("numeroSeleccionado").innerHTML =
+    "🎟️ " + numero;
 
-                modal.style.display = "flex";
-
+modal.style.display = "flex";
             });
 
             talonario.appendChild(div);
