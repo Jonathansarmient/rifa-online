@@ -18,8 +18,10 @@ body{
 
 .banner{
     width:100%;
-    height:auto;
+    max-height:220px;
+    object-fit:contain;
     border-radius:20px;
+    background:white;
 }
 
 .titulo{
