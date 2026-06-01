@@ -26,8 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnAdmin")
     .addEventListener("click", () => {
 
-        let clave =
-            prompt("Ingrese clave administrador");
+        let clave = prompt("Ingrese clave administrador");
 
         if (clave === "Rifa2026") {
 
@@ -81,10 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     )
                 ) {
 
-                    alert(
-                        "Este número ya fue reservado."
-                    );
-
+                    alert("Este número ya fue reservado.");
                     return;
                 }
 
@@ -163,8 +159,7 @@ Enviaré el comprobante de pago en una imagen por este mismo chat.
 
 Gracias.`;
 
-        let telefonoDestino =
-            "573014834578";
+        let telefonoDestino = "573014834578";
 
         let enlace =
             `https://wa.me/${telefonoDestino}?text=${encodeURIComponent(mensaje)}`;
@@ -195,7 +190,7 @@ Gracias.`;
     });
 
     // ==========================
-    // LISTADO DE RESERVAS
+    // ACTUALIZAR LISTADO
     // ==========================
 
     function actualizarListado() {
@@ -204,8 +199,7 @@ Gracias.`;
 
         vendidos.forEach(item => {
 
-            let fila =
-                document.createElement("tr");
+            let fila = document.createElement("tr");
 
             fila.innerHTML = `
                 <td>${item.numero}</td>
@@ -225,7 +219,7 @@ Gracias.`;
                         </button>
                     </td>
                     `
-                    : `<td>🔒</td>`
+                    : `<td></td>`
                 }
             `;
 
@@ -241,11 +235,7 @@ Gracias.`;
 
     window.liberarNumero = function(numero) {
 
-        if (
-            !confirm(
-                `¿Desea liberar el número ${numero}?`
-            )
-        ) {
+        if (!confirm(`¿Desea liberar el número ${numero}?`)) {
             return;
         }
 
@@ -263,11 +253,9 @@ Gracias.`;
         actualizarListado();
         actualizarEstadisticas();
 
-        alert(
-            `Número ${numero} liberado correctamente`
-        );
+        alert(`Número ${numero} liberado correctamente`);
 
-    }
+    };
 
     // ==========================
     // ESTADÍSTICAS
