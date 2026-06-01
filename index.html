@@ -117,15 +117,14 @@
         <table>
 
             <thead>
-
                 <tr>
-
                     <th>Número</th>
-
-                    <th>Estado</th>
-
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Ciudad</th>
+                    <th>Pago</th>
+                    <th>Acción</th>
                 </tr>
-
             </thead>
 
             <tbody id="listaCompras">
@@ -139,6 +138,63 @@
 </div>
 
 <script src="js/script.js"></script>
+<!-- Modal -->
 
+<div id="modalReserva" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Reservar Número</h2>
+
+        <p>Número seleccionado:
+            <strong id="numeroSeleccionado"></strong>
+        </p>
+
+        <input
+            type="text"
+            id="nombre"
+            placeholder="Nombre Completo">
+
+        <input
+            type="tel"
+            id="telefono"
+            placeholder="Teléfono">
+
+        <input
+            type="text"
+            id="ciudad"
+            placeholder="Ciudad">
+
+        <select id="metodoPago">
+
+            <option value="">
+                Método de Pago
+            </option>
+
+            <option value="Efectivo">
+                Efectivo
+            </option>
+
+            <option value="Transferencia">
+                Transferencia
+            </option>
+
+        </select>
+
+        <div class="botones-modal">
+
+            <button id="btnGuardar">
+                Reservar
+            </button>
+
+            <button id="btnCancelar">
+                Cancelar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>

@@ -4,6 +4,20 @@ document.getElementById("talonario");
 const listaCompras =
 document.getElementById("listaCompras");
 
+const modal =
+document.getElementById("modalReserva");
+
+const numeroSeleccionado =
+document.getElementById("numeroSeleccionado");
+
+const btnGuardar =
+document.getElementById("btnGuardar");
+
+const btnCancelar =
+document.getElementById("btnCancelar");
+
+let numeroActual = "";
+
 let vendidos =
 JSON.parse(localStorage.getItem("vendidos")) || [];
 
@@ -27,60 +41,35 @@ function crearTalonario(){
 
         div.innerHTML = numero;
 
-        if(vendidos.includes(numero)){
+        if(
+            vendidos.some(
+                item => item.numero === numero
+            )
+        ){
             div.classList.add("vendido");
         }
 
         div.addEventListener("click",()=>{
 
-            if(vendidos.includes(numero)){
+            if(
+                vendidos.some(
+                    item => item.numero === numero
+                )
+            ){
 
                 alert(
-                    "Este número ya no está disponible."
+                    "Este número ya fue reservado."
                 );
 
                 return;
             }
 
-            let confirmar =
-            confirm(
-                `¿Desea reservar el número ${numero}?`
-            );
+            numeroActual = numero;
 
-            if(confirmar){
+            numeroSeleccionado.innerHTML =
+            numero;
 
-                vendidos.push(numero);
-
-                localStorage.setItem(
-                    "vendidos",
-                    JSON.stringify(vendidos)
-                );
-
-                let mensaje =
-`Hola.
-
-Deseo reservar el número ${numero}
-
-Rifa Mochila Selección Colombia.
-
-Gracias.`;
-
-                let telefono =
-                "573014834578";
-
-                let enlace =
-                `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
-
-                window.open(
-                    enlace,
-                    "_blank"
-                );
-
-                crearTalonario();
-                actualizarListado();
-                actualizarEstadisticas();
-
-            }
+            modal.style.display = "flex";
 
         });
 
@@ -90,18 +79,129 @@ Gracias.`;
 
 }
 
+btnGuardar.addEventListener(
+"click",
+()=>{
+
+    let nombre =
+    document.getElementById("nombre").value;
+
+    let telefono =
+    document.getElementById("telefono").value;
+
+    let ciudad =
+    document.getElementById("ciudad").value;
+
+    let metodoPago =
+    document.getElementById("metodoPago").value;
+
+    if(
+        !nombre ||
+        !telefono ||
+        !ciudad ||
+        !metodoPago
+    ){
+        alert(
+            "Complete todos los campos."
+        );
+        return;
+    }
+
+    vendidos.push({
+
+        numero: numeroActual,
+
+        nombre: nombre,
+
+        telefono: telefono,
+
+        ciudad: ciudad,
+
+        metodoPago: metodoPago
+
+    });
+
+    localStorage.setItem(
+        "vendidos",
+        JSON.stringify(vendidos)
+    );
+
+    let mensaje =
+`Hola.
+
+Deseo reservar el número ${numeroActual}
+
+Nombre: ${nombre}
+
+Teléfono: ${telefono}
+
+Ciudad: ${ciudad}
+
+Método de pago: ${metodoPago}
+
+Enviaré el comprobante de pago en una imagen por este mismo chat.
+
+Gracias.`;
+
+    let telefonoDestino =
+    "573014834578";
+
+    let enlace =
+    `https://wa.me/${telefonoDestino}?text=${encodeURIComponent(mensaje)}`;
+
+    window.open(
+        enlace,
+        "_blank"
+    );
+
+    modal.style.display = "none";
+
+    document.getElementById("nombre").value="";
+    document.getElementById("telefono").value="";
+    document.getElementById("ciudad").value="";
+    document.getElementById("metodoPago").value="";
+
+    crearTalonario();
+    actualizarListado();
+    actualizarEstadisticas();
+
+});
+
+btnCancelar.addEventListener(
+"click",
+()=>{
+    modal.style.display = "none";
+});
+
 function actualizarListado(){
 
     listaCompras.innerHTML="";
 
-    vendidos.forEach(numero=>{
+    vendidos.forEach(item=>{
 
         let fila =
         document.createElement("tr");
 
         fila.innerHTML = `
-            <td>${numero}</td>
-            <td>No Disponible</td>
+
+        <td>${item.numero}</td>
+
+        <td>${item.nombre}</td>
+
+        <td>${item.telefono}</td>
+
+        <td>${item.ciudad}</td>
+
+        <td>${item.metodoPago}</td>
+
+        <td>
+            <button
+            class="btn-liberar"
+            onclick="liberarNumero('${item.numero}')">
+            Liberar
+            </button>
+        </td>
+
         `;
 
         listaCompras.appendChild(fila);
@@ -110,14 +210,49 @@ function actualizarListado(){
 
 }
 
+function liberarNumero(numero){
+
+    let clave =
+    prompt(
+        "Ingrese clave administrador"
+    );
+
+    if(clave !== "2026"){
+
+        alert(
+            "Clave incorrecta"
+        );
+
+        return;
+
+    }
+
+    vendidos =
+    vendidos.filter(
+        item => item.numero !== numero
+    );
+
+    localStorage.setItem(
+        "vendidos",
+        JSON.stringify(vendidos)
+    );
+
+    crearTalonario();
+    actualizarListado();
+    actualizarEstadisticas();
+
+}
+
 function actualizarEstadisticas(){
 
-    document.getElementById("vendidos")
-        .innerHTML =
-        vendidos.length;
+    document.getElementById(
+        "vendidos"
+    ).innerHTML =
+    vendidos.length;
 
-    document.getElementById("disponibles")
-        .innerHTML =
-        100 - vendidos.length;
+    document.getElementById(
+        "disponibles"
+    ).innerHTML =
+    100 - vendidos.length;
 
 }
