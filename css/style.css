@@ -273,3 +273,26 @@ table td{
     }
 
 }
+/* ==========================
+   BOTON ADMINISTRADOR
+========================== */
+
+.admin-panel{
+    text-align:center;
+    margin:20px 0;
+}
+
+#btnAdmin{
+    background:#004aad;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+#btnAdmin:hover{
+    opacity:0.9;
+}

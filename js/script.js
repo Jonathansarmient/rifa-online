@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCancelar = document.getElementById("btnCancelar");
 
     let numeroActual = "";
+    let modoAdministrador = false;
 
     let vendidos =
         JSON.parse(localStorage.getItem("vendidos")) || [];
@@ -17,6 +18,28 @@ document.addEventListener("DOMContentLoaded", () => {
     crearTalonario();
     actualizarListado();
     actualizarEstadisticas();
+
+document.getElementById("btnAdmin")
+.addEventListener("click", () => {
+
+    let clave =
+    prompt("Ingrese clave administrador");
+
+    if(clave === "Rifa2026"){
+
+        modoAdministrador = true;
+
+        alert("Modo administrador activado");
+
+        actualizarListado();
+
+    }else{
+
+        alert("Clave incorrecta");
+
+    }
+
+});
 
     function crearTalonario() {
 
@@ -157,19 +180,26 @@ Gracias.`;
             let fila = document.createElement("tr");
 
             fila.innerHTML = `
-                <td>${item.numero}</td>
-                <td>${item.nombre}</td>
-                <td>${item.telefono}</td>
-                <td>${item.ciudad}</td>
-                <td>${item.metodoPago}</td>
-                <td>
-                    <button
-                        class="btn-liberar"
-                        onclick="liberarNumero('${item.numero}')">
-                        Liberar
-                    </button>
-                </td>
-            `;
+    <td>${item.numero}</td>
+    <td>${item.nombre}</td>
+    <td>${item.telefono}</td>
+    <td>${item.ciudad}</td>
+    <td>${item.metodoPago}</td>
+
+    ${
+        modoAdministrador
+        ? `
+        <td>
+            <button
+                class="btn-liberar"
+                onclick="liberarNumero('${item.numero}')">
+                Liberar
+            </button>
+        </td>
+        `
+        : ""
+    }
+`;
 
             listaCompras.appendChild(fila);
 
