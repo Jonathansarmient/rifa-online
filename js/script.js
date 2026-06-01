@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCancelar = document.getElementById("btnCancelar");
 
     let numeroActual = "";
-    let modoAdministrador = false;
 
     let vendidos =
         JSON.parse(localStorage.getItem("vendidos")) || [];
@@ -18,31 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     crearTalonario();
     actualizarListado();
     actualizarEstadisticas();
-
-    // ==========================
-    // BOTÓN ADMINISTRADOR
-    // ==========================
-
-    document.getElementById("btnAdmin")
-    .addEventListener("click", () => {
-
-        let clave = prompt("Ingrese clave administrador");
-
-        if (clave === "Rifa2026") {
-
-            modoAdministrador = true;
-
-            alert("Modo administrador activado");
-
-            actualizarListado();
-
-        } else {
-
-            alert("Clave incorrecta");
-
-        }
-
-    });
 
     // ==========================
     // CREAR TALONARIO
@@ -199,7 +173,8 @@ Gracias.`;
 
         vendidos.forEach(item => {
 
-            let fila = document.createElement("tr");
+            let fila =
+                document.createElement("tr");
 
             fila.innerHTML = `
                 <td>${item.numero}</td>
@@ -207,20 +182,13 @@ Gracias.`;
                 <td>${item.telefono}</td>
                 <td>${item.ciudad}</td>
                 <td>${item.metodoPago}</td>
-
-                ${
-                    modoAdministrador
-                    ? `
-                    <td>
-                        <button
-                            class="btn-liberar"
-                            onclick="liberarNumero('${item.numero}')">
-                            Liberar
-                        </button>
-                    </td>
-                    `
-                    : `<td></td>`
-                }
+                <td>
+                    <button
+                        class="btn-liberar"
+                        onclick="liberarNumero('${item.numero}')">
+                        Liberar
+                    </button>
+                </td>
             `;
 
             listaCompras.appendChild(fila);
@@ -235,62 +203,23 @@ Gracias.`;
 
     window.liberarNumero = function(numero) {
 
-        if (!confirm(`¿Desea liberar el número ${numero}?`)) {
-            return;
-        }
-
-        vendidos =
-            vendidos.filter(
-                item => item.numero !== numero
-            );
-
-        localStorage.setItem(
-            "vendidos",
-            JSON.stringify(vendidos)
-        );
-
-        crearTalonario();
-        actualizarListado();
-        actualizarEstadisticas();
-
-        alert(`Número ${numero} liberado correctamente`);
-
-    };
-
-    // ==========================
-    // ESTADÍSTICAS
-    // ==========================
-
-    function actualizarEstadisticas() {
-
-        document.getElementById("vendidos").textContent =
-            vendidos.length;
-
-        document.getElementById("disponibles").textContent =
-            100 - vendidos.length;
-
-    }
-
-});
-
-            listaCompras.appendChild(fila);
-
-        });
-
-    }
-
-    window.liberarNumero = function(numero) {
-
         let clave =
-            prompt("Ingrese clave administrador");
+            prompt("Ingrese clave de administrador");
 
-        if (clave !== "2026") {
+        if (clave !== "Rifa2026") {
 
             alert("Clave incorrecta");
             return;
 
         }
 
+        let confirmar =
+            confirm(`¿Desea liberar el número ${numero}?`);
+
+        if (!confirmar) {
+            return;
+        }
+
         vendidos =
             vendidos.filter(
                 item => item.numero !== numero
@@ -305,7 +234,15 @@ Gracias.`;
         actualizarListado();
         actualizarEstadisticas();
 
-    }
+        alert(
+            `Número ${numero} liberado correctamente`
+        );
+
+    };
+
+    // ==========================
+    // ESTADÍSTICAS
+    // ==========================
 
     function actualizarEstadisticas() {
 
