@@ -1,25 +1,69 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    const talonario = document.getElementById("talonario");
-    const listaCompras = document.getElementById("listaCompras");
+    const SUPABASE_URL =
+        "https://rurjturupxgjuzgexejx.supabase.co";
 
-    const modal = document.getElementById("modalReserva");
-    const numeroSeleccionado = document.getElementById("numeroSeleccionado");
+    const SUPABASE_KEY =
+        "sb_publishable_n11wWiZX9IGMBD3YHW6aoA_LDRCapAP";
 
-    const btnGuardar = document.getElementById("btnGuardar");
-    const btnCancelar = document.getElementById("btnCancelar");
+    const supabase =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    const talonario =
+        document.getElementById("talonario");
+
+    const listaCompras =
+        document.getElementById("listaCompras");
+
+    const modal =
+        document.getElementById("modalReserva");
+
+    const numeroSeleccionado =
+        document.getElementById("numeroSeleccionado");
+
+    const btnGuardar =
+        document.getElementById("btnGuardar");
+
+    const btnCancelar =
+        document.getElementById("btnCancelar");
 
     let numeroActual = "";
 
-    let vendidos =
-        JSON.parse(localStorage.getItem("vendidos")) || [];
-
-    crearTalonario();
-    actualizarListado();
-    actualizarEstadisticas();
+    let vendidos = [];
 
     // ==========================
-    // CREAR TALONARIO
+    // CARGAR DATOS
+    // ==========================
+
+    async function cargarReservas() {
+
+        const { data, error } =
+            await supabase
+                .from("vendidos")
+                .select("*");
+
+        if (error) {
+
+            console.error(error);
+            return;
+
+        }
+
+        vendidos = data;
+
+        crearTalonario();
+        actualizarListado();
+        actualizarEstadisticas();
+
+    }
+
+    await cargarReservas();
+
+    // ==========================
+    // TALONARIO
     // ==========================
 
     function crearTalonario() {
@@ -56,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     alert("Este número ya fue reservado.");
                     return;
+
                 }
 
                 numeroActual = numero;
@@ -74,10 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================
-    // GUARDAR RESERVA
+    // GUARDAR
     // ==========================
 
-    btnGuardar.addEventListener("click", () => {
+    btnGuardar.addEventListener("click", async () => {
 
         let nombre =
             document.getElementById("nombre").value.trim();
@@ -103,18 +148,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        vendidos.push({
-            numero: numeroActual,
-            nombre: nombre,
-            telefono: telefono,
-            ciudad: ciudad,
-            metodoPago: metodoPago
-        });
+        const { error } =
+            await supabase
+                .from("vendidos")
+                .insert([
+                    {
+                        numero: numeroActual,
+                        nombre,
+                        telefono,
+                        ciudad,
+                        metodopago: metodoPago
+                    }
+                ]);
 
-        localStorage.setItem(
-            "vendidos",
-            JSON.stringify(vendidos)
-        );
+        if (error) {
+
+            alert("Error al guardar");
+            console.error(error);
+            return;
+
+        }
 
         let mensaje =
 `Hola.
@@ -129,11 +182,12 @@ Ciudad: ${ciudad}
 
 Método de pago: ${metodoPago}
 
-Enviaré el comprobante de pago en una imagen por este mismo chat.
+Enviaré el comprobante por este mismo chat.
 
 Gracias.`;
 
-        let telefonoDestino = "573014834578";
+        let telefonoDestino =
+            "573014834578";
 
         let enlace =
             `https://wa.me/${telefonoDestino}?text=${encodeURIComponent(mensaje)}`;
@@ -147,9 +201,7 @@ Gracias.`;
         document.getElementById("ciudad").value = "";
         document.getElementById("metodoPago").value = "";
 
-        crearTalonario();
-        actualizarListado();
-        actualizarEstadisticas();
+        await cargarReservas();
 
     });
 
@@ -164,7 +216,7 @@ Gracias.`;
     });
 
     // ==========================
-    // ACTUALIZAR LISTADO
+    // LISTADO
     // ==========================
 
     function actualizarListado() {
@@ -181,7 +233,8 @@ Gracias.`;
                 <td>${item.nombre}</td>
                 <td>${item.telefono}</td>
                 <td>${item.ciudad}</td>
-                <td>${item.metodoPago}</td>
+                <td>${item.metodopago}</td>
+
                 <td>
                     <button
                         class="btn-liberar"
@@ -198,13 +251,15 @@ Gracias.`;
     }
 
     // ==========================
-    // LIBERAR NÚMERO
+    // LIBERAR
     // ==========================
 
-    window.liberarNumero = function(numero) {
+    window.liberarNumero = async function(numero) {
 
         let clave =
-            prompt("Ingrese clave de administrador");
+            prompt(
+                "Ingrese clave de administrador"
+            );
 
         if (clave !== "Rifa2026") {
 
@@ -213,30 +268,25 @@ Gracias.`;
 
         }
 
-        let confirmar =
-            confirm(`¿Desea liberar el número ${numero}?`);
+        const { error } =
+            await supabase
+                .from("vendidos")
+                .delete()
+                .eq("numero", numero);
 
-        if (!confirmar) {
+        if (error) {
+
+            alert("Error al liberar");
+            console.error(error);
             return;
+
         }
 
-        vendidos =
-            vendidos.filter(
-                item => item.numero !== numero
-            );
-
-        localStorage.setItem(
-            "vendidos",
-            JSON.stringify(vendidos)
-        );
-
-        crearTalonario();
-        actualizarListado();
-        actualizarEstadisticas();
-
         alert(
-            `Número ${numero} liberado correctamente`
+            `Número ${numero} liberado`
         );
+
+        await cargarReservas();
 
     };
 
@@ -246,10 +296,14 @@ Gracias.`;
 
     function actualizarEstadisticas() {
 
-        document.getElementById("vendidos").textContent =
+        document.getElementById(
+            "vendidos"
+        ).textContent =
             vendidos.length;
 
-        document.getElementById("disponibles").textContent =
+        document.getElementById(
+            "disponibles"
+        ).textContent =
             100 - vendidos.length;
 
     }
