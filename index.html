@@ -3,12 +3,12 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rifa Mochila Selección Colombia</title>
+    <title>Rifa Mochila Selección Colombia</title>
 
-<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
@@ -18,15 +18,18 @@
 
     <!-- Banner -->
 
-    <img src="img/banner.jpg"
-         alt="Banner"
-         class="banner">
+    <img
+        src="img/banner.jpg"
+        alt="Banner"
+        class="banner">
 
-    <!-- Titulo -->
+    <!-- Título -->
 
     <div class="titulo">
 
-        <h1>🇨🇴 RIFA MOCHILA SELECCIÓN COLOMBIA 🇨🇴</h1>
+        <h1>
+            🇨🇴 RIFA MOCHILA SELECCIÓN COLOMBIA 🇨🇴
+        </h1>
 
     </div>
 
@@ -36,11 +39,14 @@
 
         <h2>🎁 Premio Destacado</h2>
 
-        <img src="img/mochila.jpg"
-             alt="Premio"
-             class="imagen-premio">
+        <img
+            src="img/mochila.jpg"
+            alt="Premio"
+            class="imagen-premio">
 
-        <h3>Mochila Oficial Selección Colombia</h3>
+        <h3>
+            Mochila Oficial Selección Colombia
+        </h3>
 
     </div>
 
@@ -49,18 +55,27 @@
     <div class="cards-info">
 
         <div class="card">
+
             <h3>💰 Valor</h3>
+
             <p>$10.000</p>
+
         </div>
 
         <div class="card">
+
             <h3>📅 Sorteo</h3>
-            <p>12 Junio 2026</p>
+
+            <p>12 de Junio de 2026</p>
+
         </div>
 
         <div class="card">
+
             <h3>🎲 Juega</h3>
-            <p>Sinuano Noche</p>
+
+            <p>Dos últimas cifras Sinuano Noche</p>
+
         </div>
 
     </div>
@@ -73,7 +88,9 @@
 
         <p>
             Gracias por apoyar este sueño.
-            Próximamente estaré participando en dos nuevas competencias y tu colaboración será fundamental para seguir creciendo y representando con orgullo a nuestra región.
+            Próximamente estaré participando en nuevas competencias
+            y tu apoyo será fundamental para continuar creciendo,
+            preparándome y representando con orgullo a nuestra región.
         </p>
 
     </div>
@@ -86,7 +103,7 @@
 
             <span id="vendidos">0</span>
 
-            <p>Vendidos</p>
+            <p>Reservados</p>
 
         </div>
 
@@ -103,12 +120,14 @@
     <!-- Talonario -->
 
     <h2 class="titulo-talonario">
+
         🎟️ Selecciona tu número
+
     </h2>
 
     <div id="talonario"></div>
 
-    <!-- Lista -->
+    <!-- Listado -->
 
     <div class="listado">
 
@@ -117,14 +136,23 @@
         <table>
 
             <thead>
+
                 <tr>
+
                     <th>Número</th>
+
                     <th>Nombre</th>
+
                     <th>Teléfono</th>
+
                     <th>Ciudad</th>
-                    <th>Pago</th>
+
+                    <th>Método Pago</th>
+
                     <th>Acción</th>
+
                 </tr>
+
             </thead>
 
             <tbody id="listaCompras">
@@ -137,17 +165,23 @@
 
 </div>
 
-<script src="js/script.js"></script>
-<!-- Modal -->
+<!-- MODAL DE RESERVA -->
 
 <div id="modalReserva" class="modal">
 
     <div class="modal-content">
 
-        <h2>Reservar Número</h2>
+        <h2>
 
-        <p>Número seleccionado:
+            Reservar Número
+
+        </h2>
+
+        <p>
+
+            Número seleccionado:
             <strong id="numeroSeleccionado"></strong>
+
         </p>
 
         <input
@@ -158,7 +192,7 @@
         <input
             type="tel"
             id="telefono"
-            placeholder="Teléfono">
+            placeholder="Número de Teléfono">
 
         <input
             type="text"
@@ -168,7 +202,7 @@
         <select id="metodoPago">
 
             <option value="">
-                Método de Pago
+                Seleccione método de pago
             </option>
 
             <option value="Efectivo">
@@ -184,17 +218,34 @@
         <div class="botones-modal">
 
             <button id="btnGuardar">
+
                 Reservar
+
             </button>
 
             <button id="btnCancelar">
+
                 Cancelar
+
             </button>
 
         </div>
 
+        <p style="margin-top:15px;font-size:14px;">
+
+            Después de reservar el número,
+            envía el comprobante de pago como imagen
+            por WhatsApp.
+
+        </p>
+
     </div>
 
 </div>
+
+<!-- SCRIPT AL FINAL -->
+
+<script src="js/script.js"></script>
+
 </body>
 </html>
