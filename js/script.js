@@ -19,27 +19,35 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarListado();
     actualizarEstadisticas();
 
-document.getElementById("btnAdmin")
-.addEventListener("click", () => {
+    // ==========================
+    // BOTÓN ADMINISTRADOR
+    // ==========================
 
-    let clave =
-    prompt("Ingrese clave administrador");
+    document.getElementById("btnAdmin")
+    .addEventListener("click", () => {
 
-    if(clave === "Rifa2026"){
+        let clave =
+            prompt("Ingrese clave administrador");
 
-        modoAdministrador = true;
+        if (clave === "Rifa2026") {
 
-        alert("Modo administrador activado");
+            modoAdministrador = true;
 
-        actualizarListado();
+            alert("Modo administrador activado");
 
-    }else{
+            actualizarListado();
 
-        alert("Clave incorrecta");
+        } else {
 
-    }
+            alert("Clave incorrecta");
 
-});
+        }
+
+    });
+
+    // ==========================
+    // CREAR TALONARIO
+    // ==========================
 
     function crearTalonario() {
 
@@ -47,9 +55,11 @@ document.getElementById("btnAdmin")
 
         for (let i = 0; i <= 99; i++) {
 
-            let numero = i.toString().padStart(2, "0");
+            let numero =
+                i.toString().padStart(2, "0");
 
-            let div = document.createElement("div");
+            let div =
+                document.createElement("div");
 
             div.className = "numero";
 
@@ -71,16 +81,20 @@ document.getElementById("btnAdmin")
                     )
                 ) {
 
-                    alert("Este número ya fue reservado.");
+                    alert(
+                        "Este número ya fue reservado."
+                    );
+
                     return;
                 }
 
                 numeroActual = numero;
 
-document.getElementById("numeroSeleccionado").innerHTML =
-    "🎟️ " + numero;
+                numeroSeleccionado.innerHTML =
+                    "🎟️ " + numero;
 
-modal.style.display = "flex";
+                modal.style.display = "flex";
+
             });
 
             talonario.appendChild(div);
@@ -88,6 +102,10 @@ modal.style.display = "flex";
         }
 
     }
+
+    // ==========================
+    // GUARDAR RESERVA
+    // ==========================
 
     btnGuardar.addEventListener("click", () => {
 
@@ -145,7 +163,8 @@ Enviaré el comprobante de pago en una imagen por este mismo chat.
 
 Gracias.`;
 
-        let telefonoDestino = "573014834578";
+        let telefonoDestino =
+            "573014834578";
 
         let enlace =
             `https://wa.me/${telefonoDestino}?text=${encodeURIComponent(mensaje)}`;
@@ -165,11 +184,19 @@ Gracias.`;
 
     });
 
+    // ==========================
+    // CANCELAR
+    // ==========================
+
     btnCancelar.addEventListener("click", () => {
 
         modal.style.display = "none";
 
     });
+
+    // ==========================
+    // LISTADO DE RESERVAS
+    // ==========================
 
     function actualizarListado() {
 
@@ -177,29 +204,86 @@ Gracias.`;
 
         vendidos.forEach(item => {
 
-            let fila = document.createElement("tr");
+            let fila =
+                document.createElement("tr");
 
             fila.innerHTML = `
-    <td>${item.numero}</td>
-    <td>${item.nombre}</td>
-    <td>${item.telefono}</td>
-    <td>${item.ciudad}</td>
-    <td>${item.metodoPago}</td>
+                <td>${item.numero}</td>
+                <td>${item.nombre}</td>
+                <td>${item.telefono}</td>
+                <td>${item.ciudad}</td>
+                <td>${item.metodoPago}</td>
 
-    ${
-        modoAdministrador
-        ? `
-        <td>
-            <button
-                class="btn-liberar"
-                onclick="liberarNumero('${item.numero}')">
-                Liberar
-            </button>
-        </td>
-        `
-        : ""
+                ${
+                    modoAdministrador
+                    ? `
+                    <td>
+                        <button
+                            class="btn-liberar"
+                            onclick="liberarNumero('${item.numero}')">
+                            Liberar
+                        </button>
+                    </td>
+                    `
+                    : `<td>🔒</td>`
+                }
+            `;
+
+            listaCompras.appendChild(fila);
+
+        });
+
     }
-`;
+
+    // ==========================
+    // LIBERAR NÚMERO
+    // ==========================
+
+    window.liberarNumero = function(numero) {
+
+        if (
+            !confirm(
+                `¿Desea liberar el número ${numero}?`
+            )
+        ) {
+            return;
+        }
+
+        vendidos =
+            vendidos.filter(
+                item => item.numero !== numero
+            );
+
+        localStorage.setItem(
+            "vendidos",
+            JSON.stringify(vendidos)
+        );
+
+        crearTalonario();
+        actualizarListado();
+        actualizarEstadisticas();
+
+        alert(
+            `Número ${numero} liberado correctamente`
+        );
+
+    }
+
+    // ==========================
+    // ESTADÍSTICAS
+    // ==========================
+
+    function actualizarEstadisticas() {
+
+        document.getElementById("vendidos").textContent =
+            vendidos.length;
+
+        document.getElementById("disponibles").textContent =
+            100 - vendidos.length;
+
+    }
+
+});
 
             listaCompras.appendChild(fila);
 
