@@ -312,3 +312,25 @@ table td{
 .btn-excel:hover{
     opacity:.9;
 }
+
+.progreso-container{
+    width:100%;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+    margin:20px 0 10px;
+}
+
+.progreso{
+    height:25px;
+    width:0%;
+    background:#198754;
+    transition:0.5s;
+}
+
+.porcentaje{
+    text-align:center;
+    font-weight:bold;
+    color:#004aad;
+    margin-bottom:20px;
+}

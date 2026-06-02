@@ -180,13 +180,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
                 ]);
 
-        if (error) {
+      if (error) {
 
-            alert("Error al guardar");
-            console.error(error);
-            return;
+    if(error.code === "23505"){
 
-        }
+        alert(
+            "Lo sentimos, este número acaba de ser reservado por otra persona."
+        );
+
+    }else{
+
+        alert("Error al guardar");
+
+    }
+
+    console.error(error);
+    return;
+
+}
 
         let mensaje =
 `Hola.
@@ -314,17 +325,22 @@ Gracias.`;
 
     function actualizarEstadisticas() {
 
-        document.getElementById(
-            "vendidos"
-        ).textContent =
-            vendidos.length;
+    document.getElementById("vendidos").textContent =
+        vendidos.length;
 
-        document.getElementById(
-            "disponibles"
-        ).textContent =
-            100 - vendidos.length;
+    document.getElementById("disponibles").textContent =
+        100 - vendidos.length;
 
-    }
+    let porcentaje =
+        (vendidos.length / 100) * 100;
+
+    document.getElementById("barraProgreso")
+        .style.width = porcentaje + "%";
+
+    document.getElementById("porcentajeVenta")
+        .textContent =
+        porcentaje.toFixed(0) + "% vendido";
+}
 function exportarExcel(){
 
     const datos = vendidos.map(item => ({
