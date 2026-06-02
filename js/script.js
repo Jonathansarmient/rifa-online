@@ -62,6 +62,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await cargarReservas();
 
+   document
+.getElementById("btnExcel")
+.addEventListener("click", () => {
+
+    let clave = prompt(
+        "Ingrese clave de administrador"
+    );
+
+    if(clave !== "Rifa2026"){
+
+        alert("Clave incorrecta");
+        return;
+
+    }
+
+    exportarExcel();
+
+});
+
     // ==========================
     // TALONARIO
     // ==========================
@@ -229,20 +248,19 @@ Gracias.`;
                 document.createElement("tr");
 
             fila.innerHTML = `
-                <td>${item.numero}</td>
-                <td>${item.nombre}</td>
-                <td>${item.telefono}</td>
-                <td>${item.ciudad}</td>
-                <td>${item.metodopago}</td>
+    <td>${item.numero}</td>
+    <td>${item.nombre}</td>
+    <td>${item.ciudad}</td>
+    <td>${item.metodopago}</td>
 
-                <td>
-                    <button
-                        class="btn-liberar"
-                        onclick="liberarNumero('${item.numero}')">
-                        Liberar
-                    </button>
-                </td>
-            `;
+    <td>
+        <button
+            class="btn-liberar"
+            onclick="liberarNumero('${item.numero}')">
+            Liberar
+        </button>
+    </td>
+`;
 
             listaCompras.appendChild(fila);
 
@@ -307,5 +325,35 @@ Gracias.`;
             100 - vendidos.length;
 
     }
+function exportarExcel(){
 
+    const datos = vendidos.map(item => ({
+
+        Numero: item.numero,
+        Nombre: item.nombre,
+        Telefono: item.telefono,
+        Ciudad: item.ciudad,
+        MetodoPago: item.metodopago,
+        EstadoPago: ""
+
+    }));
+
+    const hoja =
+        XLSX.utils.json_to_sheet(datos);
+
+    const libro =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        libro,
+        hoja,
+        "Reservas"
+    );
+
+    XLSX.writeFile(
+        libro,
+        "Rifa_Mochila_2026.xlsx"
+    );
+
+}
 });
